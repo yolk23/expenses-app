@@ -1,37 +1,49 @@
 import React from "react";
-import { useState, useEffect } from "react";
-import { signInWithPopup, createUserWithEmailAndPassword } from "firebase/auth";
+import { useState } from "react";
+import { signInWithPopup, signInWithEmailAndPassword } from "firebase/auth";
 import { auth, googleProvider } from "../../Utils/firebase";
 import { FcGoogle } from "react-icons/fc";
+import { NavLink } from "react-router-dom";
+import { useAuth } from "../Context/UserContext";
 
-const SignUpForm = () => {
+const SignInForm = () => {
+  const {login} = useAuth();
   const [form, setForm] = useState({
     email: "",
     password: "",
     confirmPassword: "",
   });
 
-  const [submitFormValues, setSubmitFormValue] = useState({});
+  const [formError,setFormError]  =useState({
+    email: "",
+    password: "",
+    confirmPassword: "",
+  });
 
-  useEffect(() => {
-    console.log(submitFormValues);
-  }, [submitFormValues]);
   const handleChange = (e) => {
     setForm((prev) => ({
       ...prev,
       [e.target.name]: e.target.value,
-    }));
-  };
+    }));  
+  }
+    
 
   const submitForm = async (e) => {
     e.preventDefault();
+
+    const hasErrors = Object.values(formError).some(error=>error!=="")
+    if(hasErrors){
+      alert("Form not completed")
+    } else
+    {
     try {
-      await createUserWithEmailAndPassword(auth, form.email, form.password);
-      console.log(auth?.currentUser);
+      await signInWithEmailAndPassword(auth, form.email, form.password);
+      await login(auth?.currentUser);
     } catch (err) {
       console.error(err);
     }
-    setSubmitFormValue(form);
+  }
+ 
   };
 
   const signInWithGoogle = async (e) => {
@@ -43,20 +55,39 @@ const SignUpForm = () => {
     }
   };
 
+
+  const validateInput = (e) => {
+    const { name, value } = e.target;
+    let errorMessage = "";
+
+    if (name === "email") {
+      errorMessage = !value.trim() ? "Email is required" : "";
+    }
+
+    if(name === "password"){
+      errorMessage = !value.trim() ? "Password is required" : ""
+    } 
+
+    setFormError(prevState => ({ ...prevState, [name]: errorMessage }));
+  }
+
+
   return (
     <div className="flex items-center justify-center h-screen ">
-      <div className="container mx-auto max-w-lg bg-white rounded-lg p-8 border border-gray-800">
-        <h1 className="text-4xl text font-bold mb-5">Welcome!</h1>
+      <div className="container mx-auto max-w-lg bg-white rounded-lg p-8 border border-black">
+        <h1 className="text-4xl text font-bold mb-5">Welcome Back!</h1>
         <p className="text-md text-gray-500 mb-5">Please enter your details.</p>
-        <form className="border border-gray-800 rounded-lg p-8 space-y-4 min-h-[30rem]">
+        <form className="border border-gray-400 rounded-lg p-8 space-y-4 min-h-[30rem]">
           <label>Email</label>
           <input
             type="text"
             name="email"
             onChange={handleChange}
+            onBlur={validateInput}
             placeholder="Enter e-mail"
             className="block w-full px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring focus:ring-blue-200 mb-3"
           />
+            <span className="text-red-600">{formError.email}</span>
           <div>
             <label>Password</label>
           </div>
@@ -65,21 +96,12 @@ const SignUpForm = () => {
             type="password"
             name="password"
             onChange={handleChange}
+            onBlur={validateInput}
             placeholder="Enter password"
             className="block w-full px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring focus:ring-blue-200"
           />
-
-          <div>
-            <label>Confirm Password</label>
-          </div>
-
-          <input
-            type="confirmPassword"
-            name="confirmPassword"
-            onChange={handleChange}
-            placeholder="Confirm Password"
-            className="block w-full px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring focus:ring-blue-200"
-          />
+   <span className="text-red-600">{formError.password}</span>
+       
           <button
             onClick={submitForm}
             className="w-full bg-white hover:bg-green-500 text-black font-bold py-2 px-4 rounded-md focus:outline-none focus:ring focus:ring-blue-200 border border-black"
@@ -93,13 +115,15 @@ const SignUpForm = () => {
           >
             <FcGoogle className="mr-2" /> Sign In With Google
           </button>
+          <NavLink to="/SignUp">
           <p className="text-center hover:text-blue-500">
-            Already have an account?
+            Dont have an account?
           </p>
+          </NavLink>
         </form>
       </div>
     </div>
   );
 };
 
-export default SignUpForm;
+export default SignInForm;

@@ -5,6 +5,8 @@ import App from "./App";
 import Home from "./Components/MainComponents/Home";
 import Expenses from "./Components/MainComponents/Expenses";
 import SignUp from "./Auth/SignUp";
+import SignIn from "./Auth/SignIn";
+import { AuthProvider } from "./Auth/Context/UserContext";
 
 const router = createBrowserRouter([
   {
@@ -22,14 +24,21 @@ const router = createBrowserRouter([
     element: <SignUp />,
     errorElement: <h1>Error</h1>,
   },
+  {
+    path: "/SignIn",
+    element: <SignIn />,
+    errorElement: <h1>Error</h1>,
+  },
 ]);
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
+     <AuthProvider>
     <RouterProvider router={router}>
       <App />
     </RouterProvider>
+    </AuthProvider>
   </React.StrictMode>
 );
 
