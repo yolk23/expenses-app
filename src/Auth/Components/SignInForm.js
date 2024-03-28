@@ -5,8 +5,10 @@ import { auth, googleProvider } from "../../Utils/firebase";
 import { FcGoogle } from "react-icons/fc";
 import { NavLink } from "react-router-dom";
 import { useAuth } from "../Context/UserContext";
+import { useNavigate } from "react-router-dom";
 
 const SignInForm = () => {
+  const navigate = useNavigate()
   const {login} = useAuth();
   const [form, setForm] = useState({
     email: "",
@@ -34,11 +36,13 @@ const SignInForm = () => {
     const hasErrors = Object.values(formError).some(error=>error!=="")
     if(hasErrors){
       alert("Form not completed")
+     
     } else
     {
     try {
       await signInWithEmailAndPassword(auth, form.email, form.password);
       await login(auth?.currentUser);
+      navigate("/")
     } catch (err) {
       console.error(err);
     }
