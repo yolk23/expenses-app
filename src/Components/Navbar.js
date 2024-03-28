@@ -1,26 +1,48 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
-import { signOut} from "firebase/auth";
-import { auth } from "../Utils/firebase";
+import { TbPigMoney } from "react-icons/tb";
 import { useAuth } from "../Auth/Context/UserContext";
 import Dropdown from "./Dropdown";
 
 const Navbar = () => {
-  const {user,logout} = useAuth()
+  const { user, logout } = useAuth();
 
   return (
-    <div className="border border-gray-800 p-2 flex justify-between bg-white">
-    <div>
-      <NavLink to="/" className="mr-4" activeClassName="font-bold">Home</NavLink>
+    <div className=" p-2 flex justify-between items-center bg-white">
+      <div className="">
+        <NavLink
+          to="/"
+          className="mr-4 flex text-sm md:text-md"
+          activeClassName="font-bold"
+        >
+          <TbPigMoney className="my-auto" /> Moneyging
+        </NavLink>
+      </div>
+      <div class="text-sm md:text-md">
+        <NavLink
+          to="/"
+          className="mr-4 hover:text-gray-600 min"
+          activeClassName="font-bold"
+        >
+          Home
+        </NavLink>
+        <NavLink
+          to="/expenses"
+          className="mr-4 hover:text-gray-600"
+          activeClassName="font-bold"
+        >
+          About Me
+        </NavLink>
+        <NavLink
+          to="/expenses"
+          className="mr-4 hover:text-gray-600"
+          activeClassName="font-bold"
+        >
+          Services
+        </NavLink>
+        <Dropdown />
+      </div>
     </div>
-    <div>
-      <NavLink to="/expenses" className="mr-4" activeClassName="font-bold">Expenses</NavLink>
-  
-      
-      
-      <Dropdown/>
-    </div>
-  </div>
   );
 };
 
