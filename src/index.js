@@ -7,6 +7,7 @@ import Expenses from "./Components/MainComponents/Expenses";
 import SignUp from "./Auth/SignUp";
 import SignIn from "./Auth/SignIn";
 import { AuthProvider } from "./Auth/Context/UserContext";
+import Profile from "./Components/Profile";
 
 const router = createBrowserRouter([
   {
@@ -29,15 +30,20 @@ const router = createBrowserRouter([
     element: <SignIn />,
     errorElement: <h1>Error</h1>,
   },
+  {
+    path: "/Profile",
+    element: <Profile />,
+    errorElement: <h1>Error</h1>,
+  },
 ]);
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
      <AuthProvider>
-    <RouterProvider router={router}>
-      <App />
-    </RouterProvider>
+      <RouterProvider router={router}>
+        <App />
+     </RouterProvider>
     </AuthProvider>
   </React.StrictMode>
 );
