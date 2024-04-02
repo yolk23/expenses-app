@@ -8,6 +8,7 @@ import SignUp from "./Auth/SignUp";
 import SignIn from "./Auth/SignIn";
 import { AuthProvider } from "./Auth/Context/UserContext";
 import Profile from "./Components/Profile";
+import { ToastContainer } from "react-toastify";
 
 const router = createBrowserRouter([
   {
@@ -40,10 +41,11 @@ const router = createBrowserRouter([
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-     <AuthProvider>
+    <ToastContainer />
+    <AuthProvider>
       <RouterProvider router={router}>
         <App />
-     </RouterProvider>
+      </RouterProvider>
     </AuthProvider>
   </React.StrictMode>
 );
