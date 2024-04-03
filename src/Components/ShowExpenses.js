@@ -72,14 +72,36 @@ const ShowExpenses = () => {
     }
   };
 
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+
   return (
     <div>
-      <AddExpense getExpenseList={getExpenseList} />
-      <h1>{auth?.currentUser?.uid}</h1>
+      <AddExpense
+        getExpenseList={getExpenseList}
+        isOpen={isModalOpen}
+        onClose={closeModal}
+      />
+
+      <button
+        className=" bg-yellow-300 hover:bg-yellow-500 text-black font-bold py-2 px-4 rounded"
+        onClick={openModal}
+      >
+        Add Expense
+      </button>
+
       <div className="flex justify-center m-6 ">
-        <table class="w-4/5  border-separate p-10 border border-black-600 rounded-lg bg-white">
+        <table class="w-4/5  h-4/5 border-separate p-10 border border-black-600 rounded-lg bg-white">
           <thead className="border border-black">
             <tr className="text-left   ">
+              <th className="border-b border-black-600">Type</th>
               <th className="border-b border-black-600">Date</th>
               <th className="border-b border-black-600">Category</th>
               <th className="border-b border-black-600">Amount</th>
@@ -94,6 +116,18 @@ const ShowExpenses = () => {
               .map((expense, i) => (
                 <tr key={i} className="border border-black">
                   {" "}
+                  <td className="bg-white ">
+                    <input
+                      defaultValue={expense.type}
+                      name="type"
+                      className={`${
+                        expense?.type?.includes("Income")
+                          ? "text-green-500"
+                          : "text-red-500"
+                      }`}
+                      onChange={handleChange}
+                    />
+                  </td>
                   <td className="bg-white ">
                     <input
                       defaultValue={expense.date}

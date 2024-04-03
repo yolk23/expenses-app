@@ -6,6 +6,7 @@ import { FcGoogle } from "react-icons/fc";
 import { NavLink } from "react-router-dom";
 import { useAuth } from "../Context/UserContext";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const SignInForm = () => {
   const navigate = useNavigate();
@@ -39,6 +40,7 @@ const SignInForm = () => {
       try {
         await signInWithEmailAndPassword(auth, form.email, form.password);
         await login(auth?.currentUser);
+        toast.success("User Sucesfully Logged In");
         navigate("/");
       } catch (err) {
         console.error(err);
@@ -50,6 +52,9 @@ const SignInForm = () => {
     e.preventDefault();
     try {
       await signInWithPopup(auth, googleProvider);
+      await login(auth?.currentUser);
+      toast.success("User Sucesfully Logged In");
+      navigate("/");
     } catch (err) {
       console.error(err);
     }

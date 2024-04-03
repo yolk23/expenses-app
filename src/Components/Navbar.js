@@ -5,7 +5,7 @@ import { useAuth } from "../Auth/Context/UserContext";
 import Dropdown from "./Dropdown";
 
 const Navbar = () => {
-  const { user, logout } = useAuth();
+  const { user } = useAuth();
 
   return (
     <div className=" p-2 flex justify-between items-center bg-white">
@@ -40,6 +40,15 @@ const Navbar = () => {
         >
           Services
         </NavLink>
+        {user && (
+          <NavLink
+            to="/expenses"
+            className="mr-4 hover:text-gray-600"
+            activeClassName="font-bold"
+          >
+            Expenses
+          </NavLink>
+        )}
         <Dropdown />
       </div>
     </div>

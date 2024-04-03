@@ -4,8 +4,11 @@ import { auth } from "../Utils/firebase";
 import { signOut } from "firebase/auth";
 import { CgProfile } from "react-icons/cg";
 import { NavLink } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const Dropdown = () => {
+  const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
   const { user, logout } = useAuth();
 
@@ -15,10 +18,10 @@ const Dropdown = () => {
 
   const signOutAccount = async () => {
     try {
+      toast.success("User has Sucessfully Logged Out");
       signOut(auth);
-      alert("user has been logged out");
       logout();
-      console.log(user);
+      navigate("/SignIn");
     } catch (err) {
       console.error(err);
     }
