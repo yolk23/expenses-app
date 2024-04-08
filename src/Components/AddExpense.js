@@ -3,12 +3,14 @@ import { db, auth } from "../Utils/firebase";
 import { useState } from "react";
 import { collection, addDoc } from "firebase/firestore";
 import { toast } from "react-toastify";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 const AddExpense = (props) => {
   const expenseCollectionsRef = collection(db, "expenses");
   const [expenseForm, setExpenseForm] = useState({
     type: "",
-    date: "",
+    date: new Date(),
     category: "",
     amount: 0,
     description: "",
@@ -20,6 +22,10 @@ const AddExpense = (props) => {
       ...prev,
       [e.target.name]: e.target.value,
     }));
+  };
+
+  const handleDateChange = (date) => {
+    setExpenseForm({ ...expenseForm, date: date });
   };
 
   function allKeysHaveValue(obj) {
@@ -98,13 +104,13 @@ const AddExpense = (props) => {
             <div>
               <label>Date</label>
             </div>
-            <input
-              placeholder="date"
-              name="date"
-              className="my-2 border border-gray-500 rounded-md w-full"
-              onChange={handleChange}
-              reqired
-            />
+            <div className=" my-2 border border-gray-500 rounded-md">
+              <DatePicker
+                dateFormat="yyyy-MM-dd"
+                selected={new Date(expenseForm.date)}
+                onChange={handleDateChange}
+              />
+            </div>
             <div>
               <label>Category</label>
             </div>

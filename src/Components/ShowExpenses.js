@@ -114,7 +114,9 @@ const ShowExpenses = () => {
                   </td>
                   <td className="bg-white ">
                     <input
-                      value={expense.date}
+                      value={new Date(expense.date.seconds * 1000)
+                        .toISOString()
+                        .substring(0, 10)}
                       name="date"
                       className="my-2"
                       onChange={handleChange}
@@ -154,7 +156,6 @@ const ShowExpenses = () => {
               ))}
           </tbody>
         </table>
-        <div>Test</div>
       </div>
     </div>
   );
