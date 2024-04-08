@@ -16,9 +16,26 @@ const ShowExpenses = () => {
   const [expenseList, setExpenseList] = useState([]);
   const expenseCollectionsRef = collection(db, "expenses");
   const [updatedExpenseForm, setUpdatedExpenseForm] = useState();
+  const [totalExpense, setTotalExpense] = useState(0);
 
   useEffect(() => {
     getExpenseList();
+    const getTotalExpenses = async () => {
+      const userData = expenseList.filter((obj) =>
+        obj?.userId?.includes(auth?.currentUser?.uid)
+      );
+      const amounts = userData
+        .filter((obj) => obj?.type?.includes("Income"))
+        .map((obj) => Number(obj.amount));
+      const total = amounts.reduce(
+        (acc, currentValue) => acc + currentValue,
+        0
+      );
+
+      setTotalExpense(total);
+    };
+
+    getTotalExpenses();
   }, []);
 
   const getExpenseList = async () => {
@@ -154,6 +171,23 @@ const ShowExpenses = () => {
                   </button> */}
                 </tr>
               ))}
+          </tbody>
+        </table>
+      </div>
+      <div className="flex justify-center m-6 overflow-auto ">
+        <table class="w-3/5 border-separate p-10 border border-black-600 rounded-lg bg-white ">
+          <thead className="border border-black">
+            <tr className="text-left   ">
+              <th className="border-b border-black-600">Overall</th>
+              <th className="border-b border-black-600">Amount</th>
+            </tr>
+          </thead>
+          <tbody className="">
+            <tr className="my-2">
+              Total Expense:
+              {totalExpense ? <>{totalExpense}</> : null}
+            </tr>
+            <tr className="my-2">Total Income:</tr>
           </tbody>
         </table>
       </div>
