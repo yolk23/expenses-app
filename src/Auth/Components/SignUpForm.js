@@ -1,5 +1,5 @@
 import React from "react";
-import { useState} from "react";
+import { useState } from "react";
 import { signInWithPopup, createUserWithEmailAndPassword } from "firebase/auth";
 import { auth, googleProvider } from "../../Utils/firebase";
 import { FcGoogle } from "react-icons/fc";
@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { NavLink } from "react-router-dom";
 
 const SignUpForm = () => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const [form, setForm] = useState({
     email: "",
@@ -15,7 +15,7 @@ const SignUpForm = () => {
     confirmPassword: "",
   });
 
-  const [formError,setFormError]  =useState({
+  const [formError, setFormError] = useState({
     email: "",
     password: "",
     confirmPassword: "",
@@ -25,27 +25,24 @@ const SignUpForm = () => {
     setForm((prev) => ({
       ...prev,
       [e.target.name]: e.target.value,
-    }));  
-  }
-    
+    }));
+  };
 
   const submitForm = async (e) => {
     e.preventDefault();
 
-    const hasErrors = Object.values(formError).some(error=>error!=="")
-    if(hasErrors){
-      alert("Form not completed")
-    } else
-    {
-    try {
-      await createUserWithEmailAndPassword(auth, form.email, form.password);
-      console.log(auth?.currentUser);
-      navigate("/SignIn");
-    } catch (err) {
-      console.error(err);
+    const hasErrors = Object.values(formError).some((error) => error !== "");
+    if (hasErrors) {
+      alert("Form not completed");
+    } else {
+      try {
+        await createUserWithEmailAndPassword(auth, form.email, form.password);
+        console.log(auth?.currentUser);
+        navigate("/SignIn");
+      } catch (err) {
+        console.error(err);
+      }
     }
-  }
- 
   };
 
   const signInWithGoogle = async (e) => {
@@ -57,7 +54,6 @@ const SignUpForm = () => {
     }
   };
 
-
   const validateInput = (e) => {
     const { name, value } = e.target;
     let errorMessage = "";
@@ -66,20 +62,18 @@ const SignUpForm = () => {
       errorMessage = !value.trim() ? "Email is required" : "";
     }
 
-    if(name === "password"){
-      errorMessage = !value.trim() ? "Password is required" : ""
-      errorMessage = value.length <=6 ? "Password length should be more than 6" : ""
-    } 
+    if (name === "password") {
+      errorMessage = !value.trim() ? "Password is required" : "";
+      errorMessage =
+        value.length <= 6 ? "Password length should be more than 6" : "";
+    }
 
-    if(name === "confirmPassword"){
-      errorMessage =  form.password !== value? "Passwords do not match" : ""
-    } 
+    if (name === "confirmPassword") {
+      errorMessage = form.password !== value ? "Passwords do not match" : "";
+    }
 
-    setFormError(prevState => ({ ...prevState, [name]: errorMessage }));
-  }
-
-
-
+    setFormError((prevState) => ({ ...prevState, [name]: errorMessage }));
+  };
 
   return (
     <div className="flex items-center justify-center h-screen ">
@@ -88,7 +82,7 @@ const SignUpForm = () => {
         <p className="text-md text-gray-500 mb-5">Please enter your details.</p>
         <form className="border border-gray-400 rounded-lg p-8 space-y-4 min-h-[30rem]">
           <label>Email</label>
-      
+
           <input
             type="text"
             name="email"
@@ -97,7 +91,7 @@ const SignUpForm = () => {
             placeholder="Enter e-mail"
             className="block w-full px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring focus:ring-blue-200 mb-3"
           />
-            <span className="text-red-600">{formError.email}</span>
+          <span className="text-red-600">{formError.email}</span>
           <div>
             <label>Password</label>
           </div>
@@ -110,7 +104,7 @@ const SignUpForm = () => {
             placeholder="Enter password"
             className="block w-full px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring focus:ring-blue-200"
           />
-   <span className="text-red-600">{formError.password}</span>
+          <span className="text-red-600">{formError.password}</span>
           <div>
             <label>Confirm Password</label>
           </div>
@@ -124,7 +118,7 @@ const SignUpForm = () => {
             className="block w-full px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring focus:ring-blue-200"
           />
 
-           <span className="text-red-600">{formError.confirmPassword}</span>
+          <span className="text-red-600">{formError.confirmPassword}</span>
           <button
             onClick={submitForm}
             className="w-full bg-white hover:bg-green-500 text-black font-bold py-2 px-4 rounded-md focus:outline-none focus:ring focus:ring-blue-200 border border-black"
@@ -139,9 +133,9 @@ const SignUpForm = () => {
             <FcGoogle className="mr-2" /> Sign In With Google
           </button>
           <NavLink to="/SignIn">
-          <p className="text-center hover:text-blue-500">
-           Already have an account?
-          </p>
+            <p className="text-center hover:text-blue-500">
+              Already have an account?
+            </p>
           </NavLink>
         </form>
       </div>

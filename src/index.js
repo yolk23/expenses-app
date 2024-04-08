@@ -9,6 +9,7 @@ import SignIn from "./Auth/SignIn";
 import { AuthProvider } from "./Auth/Context/UserContext";
 import Profile from "./Components/Profile";
 import { ToastContainer } from "react-toastify";
+import NotFound from "./Components/MainComponents/NotFound";
 
 const router = createBrowserRouter([
   {
@@ -35,6 +36,10 @@ const router = createBrowserRouter([
     path: "/Profile",
     element: <Profile />,
     errorElement: <h1>Error</h1>,
+  },
+  {
+    path: "*",
+    element: <NotFound />,
   },
 ]);
 

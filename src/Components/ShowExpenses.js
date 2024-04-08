@@ -14,9 +14,7 @@ import "react-toastify/dist/ReactToastify.css";
 
 const ShowExpenses = () => {
   const [expenseList, setExpenseList] = useState([]);
-
   const expenseCollectionsRef = collection(db, "expenses");
-
   const [updatedExpenseForm, setUpdatedExpenseForm] = useState();
 
   useEffect(() => {
@@ -32,7 +30,7 @@ const ShowExpenses = () => {
 
     try {
       setExpenseList(filteredData);
-      console.log(filteredData);
+      console.log("Filtered Data", filteredData);
     } catch (err) {
       console.error(err);
     }
@@ -57,19 +55,6 @@ const ShowExpenses = () => {
       [e.target.name]: e.target.value,
     }));
     console.log(updatedExpenseForm);
-  };
-
-  const updateExpense = async (id) => {
-    const expenseDoc = doc(db, "expenses", id);
-    try {
-      await updateDoc(expenseDoc, updatedExpenseForm);
-      await getExpenseList();
-      toast.success("Updated", {
-        position: "top-center",
-      });
-    } catch (err) {
-      console.error(err);
-    }
   };
 
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -97,8 +82,8 @@ const ShowExpenses = () => {
         Add Expense
       </button>
 
-      <div className="flex justify-center m-6 ">
-        <table class="w-4/5  h-4/5 border-separate p-10 border border-black-600 rounded-lg bg-white">
+      <div className="flex justify-center m-6 overflow-auto ">
+        <table class="border-separate p-10 border border-black-600 rounded-lg bg-white ">
           <thead className="border border-black">
             <tr className="text-left   ">
               <th className="border-b border-black-600">Type</th>
@@ -115,22 +100,23 @@ const ShowExpenses = () => {
 
               .map((expense, i) => (
                 <tr key={i} className="border border-black">
-                  {" "}
                   <td className="bg-white ">
                     <input
-                      defaultValue={expense.type}
+                      value={expense.type}
                       name="type"
-                      className={`${
-                        expense?.type?.includes("Income")
-                          ? "text-green-500"
-                          : "text-red-500"
-                      }`}
+                      className={`my-2 ${
+                        expense.type.includes("Income")
+                          ? "text-green-300"
+                          : "text-red-300"
+                      } `}
                       onChange={handleChange}
                     />
                   </td>
                   <td className="bg-white ">
                     <input
-                      defaultValue={expense.date}
+                      value={new Date(expense.date.seconds * 1000)
+                        .toISOString()
+                        .substring(0, 10)}
                       name="date"
                       className="my-2"
                       onChange={handleChange}
@@ -138,21 +124,21 @@ const ShowExpenses = () => {
                   </td>
                   <td>
                     <input
-                      defaultValue={expense.category}
+                      value={expense.category}
                       name="category"
                       onChange={handleChange}
                     />
                   </td>
                   <td>
                     <input
-                      defaultValue={expense.amount}
+                      value={expense.amount}
                       name="amount"
                       onChange={handleChange}
                     />
                   </td>
                   <td>
                     <input
-                      defaultValue={expense.description}
+                      value={expense.description}
                       name="description"
                       onChange={handleChange}
                     />
@@ -168,7 +154,6 @@ const ShowExpenses = () => {
                   </button> */}
                 </tr>
               ))}
-            <button></button>
           </tbody>
         </table>
       </div>
